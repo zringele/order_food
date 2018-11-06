@@ -1,9 +1,19 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('/css/main.css') }}">
+{% endblock %}
 {% block body %}
     <div id="wrapper">
+        <div class="overlay"></div>
         <div id="holder">
-            <input type="email" placeholder="Įveskite savo el. paštą">
-            </input>
+            <div class="input-holder">
+                <form action="/menu" method="POST" id="email-form">
+                    <label for="email-input">Įveskite savo el. pašto adresą</label>
+                    <input name ="email" type="email" id="email-input">
+                    </input>
+                    <button type="submit" form="email-form" value="Submit">Peržiūrėti Meniu</button>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock %}
