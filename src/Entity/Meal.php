@@ -24,7 +24,7 @@ class Meal
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\menu", inversedBy="meals")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Menu", inversedBy="meals")
      * @ORM\JoinColumn(nullable=false)
      */
     private $menu;

@@ -24,12 +24,12 @@ class Menu
     private $day;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\feed", inversedBy="menus")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Feed", inversedBy="menus")
      * @ORM\JoinColumn(nullable=false)
      */
     private $feed;
@@ -39,9 +39,15 @@ class Menu
      */
     private $meals;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SideDish", mappedBy="menu")
+     */
+    private $sideDishes;
+
     public function __construct()
     {
         $this->meals = new ArrayCollection();
+        $this->sideDishes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -110,6 +116,37 @@ class Menu
             // set the owning side to null (unless already changed)
             if ($meal->getMenu() === $this) {
                 $meal->setMenu(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SideDish[]
+     */
+    public function getSideDishes(): Collection
+    {
+        return $this->sideDishes;
+    }
+
+    public function addSideDish(SideDish $sideDish): self
+    {
+        if (!$this->sideDishes->contains($sideDish)) {
+            $this->sideDishes[] = $sideDish;
+            $sideDish->setMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSideDish(SideDish $sideDish): self
+    {
+        if ($this->sideDishes->contains($sideDish)) {
+            $this->sideDishes->removeElement($sideDish);
+            // set the owning side to null (unless already changed)
+            if ($sideDish->getMenu() === $this) {
+                $sideDish->setMenu(null);
             }
         }
 
