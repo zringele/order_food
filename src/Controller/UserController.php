@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class UserController
+class UserController extends AbstractController
 {
     /**
      * @Route("/")
      */
     public function homepage()
     {
-        return new Response('Hello');
+        return $this->render('user/home.html.twig');
     }
 }
