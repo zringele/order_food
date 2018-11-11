@@ -7,11 +7,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 use App\Entity\Feed;
 use App\Entity\Meal;
 use App\Entity\Menu;
 use App\Entity\Dish;
+use App\Entity\DishHasSide;
 use App\Entity\SideDish;
 use App\Entity\User;
 use App\Entity\Order;
@@ -40,12 +42,30 @@ class UserController extends AbstractController
 
         $orderRepository = $em->getRepository(Order::class);
         $userOrders = $orderRepository->findUserOrders($user->getId());
-        if ($userOrders[0]->getFeed() === $feed){
+        // dump($userOrders); exit();
+        if (isset($userOrders[0]) && $userOrders[0]->getFeed() === $feed){
             $order = $orderRepository->findTodaysUserOrder($user->getId());
             return $this->render('user/ordered.html.twig', ['order' => $order]);
         }
-        
-        return $this->render('user/menu.html.twig');
+
+        $sidesRepository = $em->getRepository(SideDish::class);
+        $dishSideRepository = $em->getRepository(DishHasSide::class);
+        $menuRepository = $em->getRepository(Menu::class);
+        $mealsRepository = $em->getRepository(Meal::class);
+        $dishRepository = $em->getRepository(Dish::class);
+
+        $days = $menuRepository->findBy(['feed' => $feed]);
+        foreach ($days as $meals => $value){
+            $days[$meals]->mealList = $mealsRepository->findBy(['menu' => $value]);
+            $days[$meals]->sidesList = $sidesRepository->findBy(['menu' => $value]);
+            foreach ($days[$meals]->mealList as $dishes => $value){
+                $days[$meals]->mealList[$dishes]->dishList = $dishRepository->findBy(['meal' => $value]);
+                    foreach  ($days[$meals]->mealList[$dishes]->dishList as $side => $value){
+                    $days[$meals]->mealList[$dishes]->dishList[$side]->sideList = $dishSideRepository->findBy(['dish' => $value]);
+                }
+            }
+        }
+        return $this->render('user/menu.html.twig', ['days' => $days]);
     }
 
     protected function registerNewUser(EntityManagerInterface $em, $email)
@@ -110,6 +130,15 @@ class UserController extends AbstractController
                     $dish->setTitle($dishContent['title']);
                     $dish->setPrice($dishContent['price']);
                     $dish->setMeal($meal);
+                    if (isset($dishContent['sideDishCounts'])){
+                        foreach ($dishContent['sideDishCounts'] as $side){
+                            $dishSides = new DishHasSide;
+                            $dishSides->setType($side['type']);
+                            $dishSides->setCount($side['count']);
+                            $dishSides->setDish($dish);
+                            $em->persist($dishSides);
+                        }
+                    }
                     $em->persist($dish);
                 }
             }

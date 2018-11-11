@@ -20,13 +20,13 @@ class OrderedDish
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderedDishes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $order_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Dish", inversedBy="orderedDishes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $dish;
 

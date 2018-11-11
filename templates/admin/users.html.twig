@@ -1,0 +1,5 @@
+{% for user in users %}
+                <a href="/admin/user/{{ user.id }}" > 
+                    <li class="list-group-item">{{user.email}} </li> 
+                </a>
+ {% endfor %}

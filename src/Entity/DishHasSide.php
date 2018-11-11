@@ -61,14 +61,14 @@ class DishHasSide
         return $this;
     }
 
-    public function getRelation(): ?dish
+    public function getDish(): ?dish
     {
-        return $this->relation;
+        return $this->dish;
     }
 
-    public function setRelation(?dish $relation): self
+    public function setDish(?dish $dish): self
     {
-        $this->relation = $relation;
+        $this->dish = $dish;
 
         return $this;
     }

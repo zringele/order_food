@@ -19,22 +19,17 @@ class SideDishRepository extends ServiceEntityRepository
         parent::__construct($registry, SideDish::class);
     }
 
-    // /**
-    //  * @return SideDish[] Returns an array of SideDish objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAvailableSidesForAWeek()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('s.menu', 'm')
+            ->join('m.feed', 'f')
+            ->where('f.date_from = :date')
+            ->setParameter('date', date('Y-m-d', strtotime('next Monday')))
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?SideDish

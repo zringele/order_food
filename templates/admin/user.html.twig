@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+    {% block body %}
+    <div class="container">
+    <h2>{{ email }}</h2>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Patiekalas</th>
+            <th scope="col">Garnyrai</th>
+            <th scope="col">Kaina</th>
+            <th scope="col">Data</th>
+            <th scope="col">Atšaukti</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, dish in orders %}
+
+                <tr>
+                <th scope="row">{{ key+1 }}</th>
+                <td>{{ dish['dish_title'] }}</td> 
+                <td>{{ dish['side_titles'] }}</td>
+                <td>{{ dish['dish_price'] }}</td>
+                <td>{{ dish['menu_date'] }}</td>
+                <td style="text-align: center;"><i data-ordered_dish_id="{{ dish['ordered_dish_id'] }}" class="fa fa-ban"></i></td>
+
+                </tr>
+            {% endfor %}
+        
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

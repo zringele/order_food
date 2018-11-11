@@ -68,3 +68,23 @@
     border: 2px solid #8F8F8F;
     background-color: white;
 }
+.js-dish {
+    cursor: pointer;
+}
+.list-group-item:hover {
+    cursor: pointer;
+    background-color: #8F8F8F;
+}
+.js-list a {
+     color: black; 
+    text-decoration: none;
+}
+
+.js-list a:hover {
+     color: black; 
+     text-decoration:none; 
+     cursor:pointer;  
+}
+.fa-ban {
+    cursor: pointer;
+}
